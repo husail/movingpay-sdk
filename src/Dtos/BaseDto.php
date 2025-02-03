@@ -45,7 +45,6 @@ abstract class BaseDto implements ArrayableInterface, DtoInterface
             ->allowPermissiveTypes()
             ->allowSuperfluousKeys()
             ->mapper()
-            ->map(static::class, Source::array($data)->camelCaseKeys())
-            ->validateAttributes();
+            ->map(static::class, Source::array($data)->camelCaseKeys());
     }
 }
