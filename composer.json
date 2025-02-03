@@ -1,7 +1,6 @@
 {
     "name": "husail/movingpay-sdk",
     "description": "MovinPay PHP SDK",
-    "version": "1.0.0-alpha",
     "keywords": [
         "movingpay",
         "movingpay-sdk"
