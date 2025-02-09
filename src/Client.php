@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Http\Message\UriInterface;
 use Husail\MovingPay\HttpClient\Builder;
 use Http\Discovery\Psr17FactoryDiscovery;
+use Husail\MovingPay\Apis\Estabelecimento;
 use Http\Client\Common\Plugin\BaseUriPlugin;
 use Husail\MovingPay\HttpClient\HttpMethodsClient;
 use Http\Client\Common\Plugin\HeaderDefaultsPlugin;
@@ -32,6 +33,7 @@ final class Client
     public const BASE_URI = 'https://api.movingpay.com.br/api/v3';
 
     private Builder $httpClientBuilder;
+    public readonly Estabelecimento $estabelecimento;
 
     public function __construct(?Authentication $authentication = null, ?Builder $httpClientBuilder = null, ?LoggerInterface $logger = null, ?FormatterInterface $formatter = null)
     {
@@ -53,6 +55,8 @@ final class Client
         if (!empty($logger)) {
             $this->httpClientBuilder->addPlugin(new LoggerPlugin(Client::PACKAGE_NAME, $logger, $formatter ?? new SimpleFormatter()));
         }
+
+        $this->estabelecimento = new Estabelecimento($this->getHttpClient());
     }
 
     private function factoryBaseUri(): UriInterface
