@@ -59,6 +59,8 @@
             "@php vendor/bin/testbench serve --ansi"
         ],
         "post-autoload-dump": [
+            "@clear",
+            "@prepare"
         ],
         "prepare-release": [
             "@format",
@@ -67,7 +69,9 @@
     },
     "extra": {
         "laravel": {
-            "providers": [],
+            "providers": [
+                "Husail\\MovingPay\\MovingPayServiceProvider"
+            ],
             "aliases": []
         }
     },
