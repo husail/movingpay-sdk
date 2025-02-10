@@ -23,20 +23,20 @@ class EstabelecimentoDto extends BaseDto
     public string $cpfCnpj;
     public ?string $inscricaoEstadual;
     public ?string $inscricaoFazenda;
-    public string $tipoEmpresa;
+    public ?string $tipoEmpresa;
     public \DateTimeImmutable $dataFundacao;
-    public string $contatoPrincipal;
+    public ?string $contatoPrincipal;
     public ?int $horarioFuncionamento;
     public ?int $localizadoShopping;
     public ?string $faturamentoMensal;
     public ?int $bloquearLiquidacao;
-    public int $planoId;
-    public string $planoNome;
+    public ?int $planoId;
+    public ?string $planoNome;
     public ?int $unidadeNegocioId;
     public ?string $unidadeNegocioNome;
     public ?int $codigoVendedor;
     public ?string $nomeVendedor;
-    public string $recipientId;
+    public ?string $recipientId;
     public ?string $urlEcommerce;
     public ?int $transferenciaAutomatica;
     public ?string $transferenciaValorMinimo;
@@ -63,6 +63,6 @@ class EstabelecimentoDto extends BaseDto
     public ?int $situacao;
     public ?string $motivoDescredenciamento;
     public ?\DateTimeImmutable $dataDescredenciamento;
-    public \DateTimeImmutable $createdAt;
-    public \DateTimeImmutable $updatedAt;
+    public ?\DateTimeImmutable $createdAt;
+    public ?\DateTimeImmutable $updatedAt;
 }
