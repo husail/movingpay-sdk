@@ -11,6 +11,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Husail\MovingPay\Contracts;
+namespace Husail\MovingPay\Dtos\Transacao;
 
-interface DtoInterface {}
+use Husail\MovingPay\Dtos\BaseDto;
+
+class TransacaoResponseDto extends BaseDto
+{
+    public string $mensagem;
+    public ContadorDto $contador;
+    public TransacaoPaginacaoDto $transacoes;
+}

@@ -15,6 +15,7 @@ namespace Husail\MovingPay;
 
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\UriInterface;
+use Husail\MovingPay\Apis\Transacao;
 use Husail\MovingPay\HttpClient\Builder;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Husail\MovingPay\Apis\Estabelecimento;
@@ -26,6 +27,12 @@ use Husail\MovingPay\HttpClient\Plugin\AuthenticationPlugin;
 use Husail\MovingPay\Contracts\Http\Message\FormatterInterface;
 use Husail\MovingPay\HttpClient\Message\Formatter\SimpleFormatter;
 
+/**
+ * MovingPay Client
+ *
+ * @property-read Estabelecimento $estabelecimento
+ * @property-read Transacao $transacao
+ */
 final class Client
 {
     public const PACKAGE_NAME = 'MovingPay';
@@ -34,6 +41,7 @@ final class Client
 
     private Builder $httpClientBuilder;
     public readonly Estabelecimento $estabelecimento;
+    public readonly Transacao $transacao;
 
     public function __construct(?Authentication $authentication = null, ?Builder $httpClientBuilder = null, ?LoggerInterface $logger = null, ?FormatterInterface $formatter = null)
     {
@@ -57,6 +65,7 @@ final class Client
         }
 
         $this->estabelecimento = new Estabelecimento($this->getHttpClient());
+        $this->transacao = new Transacao($this->getHttpClient());
     }
 
     private function factoryBaseUri(): UriInterface

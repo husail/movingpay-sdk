@@ -47,7 +47,7 @@ class SimpleFormatter implements FormatterInterface
      * @param bool $outputExpanded - Determines if the JSON output should be expanded
      * @param string $binaryDetectionRegex - Regex for detecting binary bodies
      */
-    public function __construct(bool $outputExpanded = true, string $binaryDetectionRegex = '/([\x00-\x09\x0C\x0E-\x1F\x7F])/')
+    public function __construct(bool $outputExpanded = false, string $binaryDetectionRegex = '/([\x00-\x09\x0C\x0E-\x1F\x7F])/')
     {
         $this->outputExpanded = $outputExpanded;
         $this->binaryDetectionRegex = $binaryDetectionRegex;

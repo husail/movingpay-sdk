@@ -14,10 +14,13 @@ declare(strict_types=1);
 namespace Husail\MovingPay\Facades;
 
 use Husail\MovingPay\Client;
+use Husail\MovingPay\Apis\Transacao;
 use Illuminate\Support\Facades\Facade;
+use Husail\MovingPay\Apis\Estabelecimento;
 
 /**
- * @see Client
+ * @property-read Estabelecimento $estabelecimento
+ * @property-read Transacao $transacao
  */
 class MovingPay extends Facade
 {
@@ -26,7 +29,7 @@ class MovingPay extends Facade
         return Client::class;
     }
 
-    public static function client()
+    public static function client(): Client
     {
         return self::getFacadeRoot();
     }

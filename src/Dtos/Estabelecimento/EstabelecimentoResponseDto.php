@@ -11,6 +11,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Husail\MovingPay\Contracts;
+namespace Husail\MovingPay\Dtos\Estabelecimento;
 
-interface DtoInterface {}
+use Husail\MovingPay\Dtos\BaseDto;
+
+class EstabelecimentoResponseDto extends BaseDto
+{
+    public EstabelecimentoDto $estabelecimento;
+    public ?array $adquirentes;
+    public ?array $capturas;
+}

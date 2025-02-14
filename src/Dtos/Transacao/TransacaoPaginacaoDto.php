@@ -11,18 +11,16 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Husail\MovingPay\Dtos;
+namespace Husail\MovingPay\Dtos\Transacao;
 
 use Husail\MovingPay\Dtos\BaseDto;
-use Husail\MovingPay\Dtos\EstabelecimentoDto;
 
-class ResultPagerDto extends BaseDto
+class TransacaoPaginacaoDto extends BaseDto
 {
-    public int $agenda;
-    public int $page;
     public int $total;
     public int $perPage;
+    public int $page;
     public int $lastPage;
-    /** @var array<int, EstabelecimentoDto> */
+    /** @var TransacaoDto[] */
     public array $data;
 }
