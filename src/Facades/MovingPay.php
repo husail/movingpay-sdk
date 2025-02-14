@@ -14,11 +14,13 @@ declare(strict_types=1);
 namespace Husail\MovingPay\Facades;
 
 use Husail\MovingPay\Client;
+use Husail\MovingPay\Apis\Transacao;
 use Illuminate\Support\Facades\Facade;
 use Husail\MovingPay\Apis\Estabelecimento;
 
 /**
  * @property-read Estabelecimento $estabelecimento
+ * @property-read Transacao $transacao
  */
 class MovingPay extends Facade
 {
