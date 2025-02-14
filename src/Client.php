@@ -26,6 +26,11 @@ use Husail\MovingPay\HttpClient\Plugin\AuthenticationPlugin;
 use Husail\MovingPay\Contracts\Http\Message\FormatterInterface;
 use Husail\MovingPay\HttpClient\Message\Formatter\SimpleFormatter;
 
+/**
+ * MovingPay Client
+ *
+ * @property-read Estabelecimento $estabelecimento
+ */
 final class Client
 {
     public const PACKAGE_NAME = 'MovingPay';
