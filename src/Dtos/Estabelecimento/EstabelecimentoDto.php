@@ -11,7 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Husail\MovingPay\Dtos;
+namespace Husail\MovingPay\Dtos\Estabelecimento;
+
+use Husail\MovingPay\Dtos\BaseDto;
 
 class EstabelecimentoDto extends BaseDto
 {
