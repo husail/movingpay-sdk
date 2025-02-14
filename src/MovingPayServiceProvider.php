@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace Husail\MovingPay;
 
+use Psr\Log\LoggerInterface;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
+use Husail\MovingPay\HttpClient\Message\Formatter\SimpleFormatter;
 
 class MovingPayServiceProvider extends ServiceProvider
 {
@@ -23,12 +26,25 @@ class MovingPayServiceProvider extends ServiceProvider
             __DIR__ . '/../config/movingpay.php',
             'movingpay'
         );
-        $this->app->singleton(Client::class, function ($app) {
+        $this->app->singleton(Client::class, function (Application $app) {
+            $logEnabled = config('movingpay.log_enabled', false);
+            $outputExpanded = config('movingpay.log_formatter_expanded', false);
+
+            $logger = $logEnabled
+                ? $app->make(LoggerInterface::class)
+                : null;
+
+            $formatter = $logEnabled
+                ? new SimpleFormatter($outputExpanded)
+                : null;
+
             return new Client(
-                new Authentication(
+                authentication: new Authentication(
                     token: config('movingpay.token'),
                     customerId: config('movingpay.customer_id')
-                )
+                ),
+                logger: $logger,
+                formatter: $formatter
             );
         });
     }
