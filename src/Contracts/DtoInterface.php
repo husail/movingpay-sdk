@@ -13,6 +13,4 @@ declare(strict_types=1);
 
 namespace Husail\MovingPay\Contracts;
 
-interface DtoInterface
-{
-}
+interface DtoInterface {}

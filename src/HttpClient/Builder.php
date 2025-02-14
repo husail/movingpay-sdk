@@ -103,7 +103,6 @@ final class Builder
      * Remove a plugin by its fully qualified class name (FQCN).
      *
      * @param string $fqcn
-     *
      * @return void
      */
     public function removePlugin(string $fqcn): void

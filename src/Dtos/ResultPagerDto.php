@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Husail\MovingPay\Dtos;
 
-use Husail\MovingPay\Dtos\BaseDto;
-use Husail\MovingPay\Dtos\EstabelecimentoDto;
-
 class ResultPagerDto extends BaseDto
 {
     public int $agenda;
