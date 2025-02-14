@@ -47,7 +47,7 @@ if ($response->successful()) {
 ```php
 use MovingPay;
 
-$response = MovingPay::client()->estabelecimento->getAll();
+$response = MovingPay::client()->estabelecimento->all();
 if ($response->successful()) {
     // Handle the response
 }
