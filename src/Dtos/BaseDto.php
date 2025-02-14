@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Husail\MovingPay\Dtos;
 
-use CuyZ\Valinor\MapperBuilder;
 use CuyZ\Valinor\Mapper\MappingError;
 use CuyZ\Valinor\Mapper\Source\Source;
 use Husail\MovingPay\Contracts\DtoInterface;
 use Husail\MovingPay\Contracts\ArrayableInterface;
+use Husail\MovingPay\Factories\ValinorMapperFactory;
 
 abstract class BaseDto implements ArrayableInterface, DtoInterface
 {
@@ -41,10 +41,7 @@ abstract class BaseDto implements ArrayableInterface, DtoInterface
      */
     public static function fromArray(array $data): static
     {
-        return (new MapperBuilder())
-            ->allowPermissiveTypes()
-            ->allowSuperfluousKeys()
-            ->mapper()
+        return ValinorMapperFactory::makeMapper()
             ->map(static::class, Source::array($data)->camelCaseKeys());
     }
 }

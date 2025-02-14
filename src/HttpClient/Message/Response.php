@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Husail\MovingPay\HttpClient\Message;
 
-use CuyZ\Valinor\MapperBuilder;
 use Husail\MovingPay\Utils\Arr;
 use CuyZ\Valinor\Mapper\MappingError;
 use CuyZ\Valinor\Mapper\Source\Source;
 use Psr\Http\Message\ResponseInterface;
 use Husail\MovingPay\Contracts\DtoInterface;
+use Husail\MovingPay\Factories\ValinorMapperFactory;
 use CuyZ\Valinor\Mapper\Source\Exception\InvalidSource;
 
 class Response
@@ -190,10 +190,7 @@ class Response
             return json_decode($this->body(), false);
         }
 
-        return (new MapperBuilder())
-            ->allowPermissiveTypes()
-            ->allowSuperfluousKeys()
-            ->mapper()
+        return ValinorMapperFactory::makeMapper()
             ->map($signatureDto, Source::json($this->body())->camelCaseKeys());
     }
 
