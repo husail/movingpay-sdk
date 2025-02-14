@@ -20,8 +20,8 @@ use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\RequestFactoryInterface;
+use Husail\MovingPay\Utils\QueryStringBuilder;
 use Husail\MovingPay\HttpClient\Message\Response;
-use Husail\MovingPay\HttpClient\Util\QueryStringBuilder;
 
 final class HttpMethodsClient
 {

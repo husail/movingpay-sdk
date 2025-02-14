@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Husail\MovingPay\HttpClient\Message;
 
 use CuyZ\Valinor\MapperBuilder;
+use Husail\MovingPay\Utils\Arr;
 use CuyZ\Valinor\Mapper\MappingError;
 use CuyZ\Valinor\Mapper\Source\Source;
 use Psr\Http\Message\ResponseInterface;
-use Husail\MovingPay\HttpClient\Util\Arr;
 use Husail\MovingPay\Contracts\DtoInterface;
 use CuyZ\Valinor\Mapper\Source\Exception\InvalidSource;
 

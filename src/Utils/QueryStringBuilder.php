@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Husail\MovingPay\HttpClient\Util;
+namespace Husail\MovingPay\Utils;
 
 final class QueryStringBuilder
 {
