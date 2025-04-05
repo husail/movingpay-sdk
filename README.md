@@ -24,7 +24,7 @@ $client = new Client(
     new Authentication(token: 'your-token', customerId: 'your-customer-id')
 );
 
-$response = $client->estabelecimento->getAll();
+$response = $client->estabelecimento->all();
 if ($response->successful()) {
     // Handle the response
 }
@@ -48,7 +48,7 @@ $client = new Client(
     formatter: new SimpleFormatter(true) // 'true' enables pretty-printed JSON logs
 );
 
-$response = $client->estabelecimento->getAll();
+$response = $client->estabelecimento->all();
 if ($response->successful()) {
     // Handle the response
 }
