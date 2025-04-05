@@ -17,6 +17,6 @@ use Husail\MovingPay\Dtos\BaseDto;
 
 class TransacaoMetricaDto extends BaseDto
 {
-    public int $valor;
-    public int $quantidade;
+    public ?int $valor;
+    public ?int $quantidade;
 }

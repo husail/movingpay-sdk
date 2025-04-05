@@ -18,6 +18,6 @@ use Husail\MovingPay\Dtos\BaseDto;
 class TransacaoResponseDto extends BaseDto
 {
     public string $mensagem;
-    public ContadorDto $contador;
-    public TransacaoPaginacaoDto $transacoes;
+    public ?ContadorDto $contador;
+    public ?TransacaoPaginacaoDto $transacoes;
 }
