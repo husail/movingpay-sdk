@@ -18,8 +18,8 @@ use Husail\MovingPay\Dtos\BaseDto;
 class EstabelecimentoPaginacaoDto extends BaseDto
 {
     public int $agenda;
-    public int $page;
     public int $total;
+    public int $page;
     public int $perPage;
     public int $lastPage;
     /** @var EstabelecimentoDto[] */

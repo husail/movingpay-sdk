@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Husail\MovingPay\Apis;
 
 use Psr\Http\Client\ClientExceptionInterface;
+use Husail\MovingPay\HttpClient\RequestOptions;
 use Husail\MovingPay\HttpClient\Message\Response;
 use Husail\MovingPay\Dtos\Estabelecimento\EstabelecimentoResponseDto;
 use Husail\MovingPay\Dtos\Estabelecimento\EstabelecimentoPaginacaoDto;
@@ -53,7 +54,7 @@ final class Estabelecimento extends AbstractApi
     public function all(array $filters = []): Response
     {
         $response = $this->httpClient->get('/estabelecimentos', [
-            'query' => $filters,
+            RequestOptions::QUERY => $filters,
         ]);
 
         return $response->setResponseDto(EstabelecimentoPaginacaoDto::class);
@@ -69,7 +70,11 @@ final class Estabelecimento extends AbstractApi
      */
     public function get(int|string $codigoCliente): Response
     {
-        $response = $this->httpClient->get("/estabelecimentos/visualizar?id={$codigoCliente}");
+        $response = $this->httpClient->get('/estabelecimentos/visualizar', [
+            RequestOptions::QUERY => [
+                'id' => $codigoCliente,
+            ],
+        ]);
 
         return $response->setResponseDto(EstabelecimentoResponseDto::class);
     }
