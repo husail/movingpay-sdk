@@ -17,6 +17,7 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Husail\MovingPay\HttpClient\RequestOptions;
 use Husail\MovingPay\HttpClient\Message\Response;
 use Husail\MovingPay\Dtos\Transacao\TransacaoResponseDto;
+use Husail\MovingPay\Dtos\Transacao\LiquidacaoResponseDto;
 
 final class Transacao extends AbstractApi
 {
@@ -64,5 +65,24 @@ final class Transacao extends AbstractApi
         ]);
 
         return $response->setResponseDto(TransacaoResponseDto::class);
+    }
+
+    /**
+     * Obter transação pelo NSU.
+     *
+     * @param int $transactionId
+     * @return Response
+     *
+     * @throws ClientExceptionInterface
+     */
+    public function parcels(int $transactionId): Response
+    {
+        $response = $this->httpClient->get('/transacoes/parcelas', [
+            RequestOptions::QUERY => [
+                'transacaoId' => $transactionId,
+            ],
+        ]);
+
+        return $response->setResponseDto(LiquidacaoResponseDto::class);
     }
 }
