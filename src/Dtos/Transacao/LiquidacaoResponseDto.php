@@ -15,9 +15,14 @@ namespace Husail\MovingPay\Dtos\Transacao;
 
 use Husail\MovingPay\Dtos\BaseDto;
 
-class TransacaoResponseDto extends BaseDto
+class LiquidacaoResponseDto extends BaseDto
 {
-    public string $mensagem;
-    public ?ContadorDto $contador;
-    public ?TransacaoPaginacaoDto $transacoes;
+    public int $valorTotal;
+    public int $valorCancelamento;
+    public int $mdrTotal;
+    public int $ravTotal;
+    public int $valorLiquido;
+    public bool $split;
+    /** @var LiquidacaoDto[] */
+    public array $data;
 }

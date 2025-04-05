@@ -15,13 +15,14 @@ namespace Husail\MovingPay\Dtos\Estabelecimento;
 
 use Husail\MovingPay\Dtos\BaseDto;
 
-class EstabelecimentoPaginacaoDto extends BaseDto
+class DepartamentosDto extends BaseDto
 {
-    public int $agenda;
-    public int $total;
-    public int $page;
-    public int $perPage;
-    public int $lastPage;
-    /** @var EstabelecimentoDto[] */
-    public array $data;
+    public int $id;
+    public string $descricao;
+    public string $mcc;
+    public string $cnae;
+    public int $padrao;
+    public int $situacao;
+    public \DateTimeImmutable $createdAt;
+    public \DateTimeImmutable $updatedAt;
 }
