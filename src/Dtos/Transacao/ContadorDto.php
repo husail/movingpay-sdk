@@ -17,11 +17,11 @@ use Husail\MovingPay\Dtos\BaseDto;
 
 class ContadorDto extends BaseDto
 {
-    public TransacaoMetricaDto $aprovadas;
-    public TransacaoMetricaDto $pendentes;
-    public TransacaoMetricaDto $negadas;
-    public TransacaoMetricaDto $desfeitas;
-    public TransacaoMetricaDto $devolvidas;
-    public TransacaoMetricaDto $bloqueadas;
-    public TransacaoMetricaDto $parcialBloqueadas;
+    public ?TransacaoMetricaDto $aprovadas;
+    public ?TransacaoMetricaDto $pendentes;
+    public ?TransacaoMetricaDto $negadas;
+    public ?TransacaoMetricaDto $desfeitas;
+    public ?TransacaoMetricaDto $devolvidas;
+    public ?TransacaoMetricaDto $bloqueadas;
+    public ?TransacaoMetricaDto $parcialBloqueadas;
 }

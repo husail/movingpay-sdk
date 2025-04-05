@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace Husail\MovingPay\Apis;
 
 use Psr\Http\Client\ClientExceptionInterface;
+use Husail\MovingPay\HttpClient\RequestOptions;
 use Husail\MovingPay\HttpClient\Message\Response;
 use Husail\MovingPay\Dtos\Transacao\TransacaoResponseDto;
+use Husail\MovingPay\Dtos\Transacao\LiquidacaoResponseDto;
 
 final class Transacao extends AbstractApi
 {
@@ -26,13 +28,14 @@ final class Transacao extends AbstractApi
      * - start_date (string, opcional): Data do início da venda (formato YYYY-MM-DD).
      * - finish_date (string, opcional): Data do fim da venda (formato YYYY-MM-DD).
      * - NSU (string, opcional): Identificador NSU da transação.
-     * - lojaID (string, opcional): Código de identificação da loja.
+     * - LojaID (string, opcional): Código de identificação da loja.
      * - Situacao (string, opcional): Situação da transação.
      * - Bandeira (string, opcional): Bandeira do cartão.
      * - Adquirente (string, opcional): Código de cadastro das adquirentes.
      * - TipoTransacao (int, opcional): Tipo da transação (0: Presencial, 1: E-Commerce).
      * - capture_method (string, opcional): Forma de captura da transação.
      * - capture_partner (string, opcional): Provedor da transação.
+     * - orderby (string, opcional): Campo para ordenação dos resultados (ex: start_date,asc).
      * - page (int, opcional): Número da página para paginação.
      * - limit (int, opcional): Número máximo de itens por página.
      *
@@ -40,13 +43,14 @@ final class Transacao extends AbstractApi
      * start_date?: string,
      * finish_date?: string,
      * NSU?: string,
-     * lojaID?: string,
+     * LojaID?: string,
      * Situacao?: string,
      * Bandeira?: string,
      * Adquirente?: string,
      * TipoTransacao?: int,
      * capture_method?: string,
      * capture_partner?: string,
+     * orderby?: string,
      * page?: int,
      * limit?: int
      * } $filters
@@ -57,9 +61,28 @@ final class Transacao extends AbstractApi
     public function all(array $filters = []): Response
     {
         $response = $this->httpClient->get('/transacoes', [
-            'query' => $filters,
+            RequestOptions::QUERY => $filters,
         ]);
 
         return $response->setResponseDto(TransacaoResponseDto::class);
+    }
+
+    /**
+     * Obter transação pelo NSU.
+     *
+     * @param int $transactionId
+     * @return Response
+     *
+     * @throws ClientExceptionInterface
+     */
+    public function parcels(int $transactionId): Response
+    {
+        $response = $this->httpClient->get('/transacoes/parcelas', [
+            RequestOptions::QUERY => [
+                'transacaoId' => $transactionId,
+            ],
+        ]);
+
+        return $response->setResponseDto(LiquidacaoResponseDto::class);
     }
 }
