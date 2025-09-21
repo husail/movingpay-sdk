@@ -52,7 +52,7 @@ final class Estabelecimento extends AbstractApi
      *
      * @throws ClientExceptionInterface
      */
-    public function all(array $filters = []): Response
+    public function todos(array $filters = []): Response
     {
         $response = $this->httpClient->get('/estabelecimentos', [
             RequestOptions::QUERY => $filters,
