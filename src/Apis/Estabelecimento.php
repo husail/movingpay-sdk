@@ -16,6 +16,8 @@ namespace Husail\MovingPay\Apis;
 use Psr\Http\Client\ClientExceptionInterface;
 use Husail\MovingPay\HttpClient\RequestOptions;
 use Husail\MovingPay\HttpClient\Message\Response;
+use Husail\MovingPay\Dtos\Estabelecimento\ContatoPaginacaoDto;
+use Husail\MovingPay\Dtos\Estabelecimento\EnderecoPaginacaoDto;
 use Husail\MovingPay\Dtos\Estabelecimento\DepartamentosPaginacaoDto;
 use Husail\MovingPay\Dtos\Estabelecimento\EstabelecimentoResponseDto;
 use Husail\MovingPay\Dtos\Estabelecimento\EstabelecimentoPaginacaoDto;
@@ -52,7 +54,7 @@ final class Estabelecimento extends AbstractApi
      *
      * @throws ClientExceptionInterface
      */
-    public function all(array $filters = []): Response
+    public function todos(array $filters = []): Response
     {
         $response = $this->httpClient->get('/estabelecimentos', [
             RequestOptions::QUERY => $filters,
@@ -64,12 +66,12 @@ final class Estabelecimento extends AbstractApi
     /**
      * Obter estabelecimento pelo código do cliente
      *
-     * @param int|string $codigoCliente
+     * @param string $codigoCliente
      * @return Response
      *
      * @throws ClientExceptionInterface
      */
-    public function get(int|string $codigoCliente): Response
+    public function visualizar(string $codigoCliente): Response
     {
         $response = $this->httpClient->get('/estabelecimentos/visualizar', [
             RequestOptions::QUERY => [
@@ -83,12 +85,12 @@ final class Estabelecimento extends AbstractApi
     /**
      * Obter departamentos do estabelecimento
      *
-     * @param int|string $codigoCliente
+     * @param string $codigoCliente
      * @return Response
      *
      * @throws ClientExceptionInterface
      */
-    public function departaments(int|string $codigoCliente): Response
+    public function departamentos(string $codigoCliente): Response
     {
         $response = $this->httpClient->get('/departamentos', [
             RequestOptions::QUERY => [
@@ -97,5 +99,43 @@ final class Estabelecimento extends AbstractApi
         ]);
 
         return $response->setResponseDto(DepartamentosPaginacaoDto::class);
+    }
+
+    /**
+     * Obter endereços do estabelecimento
+     *
+     * @param string $codigoCliente
+     * @return Response
+     *
+     * @throws ClientExceptionInterface
+     */
+    public function enderecos(string $codigoCliente): Response
+    {
+        $response = $this->httpClient->get('/enderecos', [
+            RequestOptions::QUERY => [
+                'mid' => $codigoCliente,
+            ],
+        ]);
+
+        return $response->setResponseDto(EnderecoPaginacaoDto::class);
+    }
+
+    /**
+     * Obter contatos do estabelecimento
+     *
+     * @param string $codigoCliente
+     * @return Response
+     *
+     * @throws ClientExceptionInterface
+     */
+    public function contatos(string $codigoCliente): Response
+    {
+        $response = $this->httpClient->get('/contatos', [
+            RequestOptions::QUERY => [
+                'mid' => $codigoCliente,
+            ],
+        ]);
+
+        return $response->setResponseDto(ContatoPaginacaoDto::class);
     }
 }

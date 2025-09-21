@@ -24,7 +24,7 @@ $client = new Client(
     new Authentication(token: 'your-token', customerId: 'your-customer-id')
 );
 
-$response = $client->estabelecimento->all();
+$response = $client->estabelecimento->todos();
 if ($response->successful()) {
     // Handle the response
 }
@@ -48,7 +48,7 @@ $client = new Client(
     formatter: new SimpleFormatter(true) // 'true' enables pretty-printed JSON logs
 );
 
-$response = $client->estabelecimento->all();
+$response = $client->estabelecimento->todos();
 if ($response->successful()) {
     // Handle the response
 }
@@ -77,7 +77,7 @@ if ($response->successful()) {
 ```php
 use MovingPay;
 
-$response = MovingPay::client()->estabelecimento->all();
+$response = MovingPay::client()->estabelecimento->todos();
 if ($response->successful()) {
     // Handle the response
 }
