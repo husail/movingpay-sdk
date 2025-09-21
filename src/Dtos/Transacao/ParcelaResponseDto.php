@@ -15,7 +15,7 @@ namespace Husail\MovingPay\Dtos\Transacao;
 
 use Husail\MovingPay\Dtos\BaseDto;
 
-class LiquidacaoResponseDto extends BaseDto
+class ParcelaResponseDto extends BaseDto
 {
     public int $valorTotal;
     public int $valorCancelamento;
@@ -23,6 +23,6 @@ class LiquidacaoResponseDto extends BaseDto
     public int $ravTotal;
     public int $valorLiquido;
     public bool $split;
-    /** @var LiquidacaoDto[] */
+    /** @var ParcelaDto[] */
     public array $data;
 }

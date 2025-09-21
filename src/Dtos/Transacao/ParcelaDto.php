@@ -16,7 +16,7 @@ namespace Husail\MovingPay\Dtos\Transacao;
 use DateTimeImmutable;
 use Husail\MovingPay\Dtos\BaseDto;
 
-class LiquidacaoDto extends BaseDto
+class ParcelaDto extends BaseDto
 {
     public int $id;
     public int $transacaoId;
