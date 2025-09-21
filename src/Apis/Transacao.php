@@ -58,7 +58,7 @@ final class Transacao extends AbstractApi
      *
      * @throws ClientExceptionInterface
      */
-    public function all(array $filters = []): Response
+    public function todos(array $filters = []): Response
     {
         $response = $this->httpClient->get('/transacoes', [
             RequestOptions::QUERY => $filters,
