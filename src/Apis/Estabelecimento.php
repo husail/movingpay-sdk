@@ -64,12 +64,12 @@ final class Estabelecimento extends AbstractApi
     /**
      * Obter estabelecimento pelo código do cliente
      *
-     * @param int|string $codigoCliente
+     * @param string $codigoCliente
      * @return Response
      *
      * @throws ClientExceptionInterface
      */
-    public function get(int|string $codigoCliente): Response
+    public function visualizar(string $codigoCliente): Response
     {
         $response = $this->httpClient->get('/estabelecimentos/visualizar', [
             RequestOptions::QUERY => [
