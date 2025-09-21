@@ -16,6 +16,7 @@ namespace Husail\MovingPay\Apis;
 use Psr\Http\Client\ClientExceptionInterface;
 use Husail\MovingPay\HttpClient\RequestOptions;
 use Husail\MovingPay\HttpClient\Message\Response;
+use Husail\MovingPay\Dtos\Estabelecimento\EnderecoPaginacaoDto;
 use Husail\MovingPay\Dtos\Estabelecimento\DepartamentosPaginacaoDto;
 use Husail\MovingPay\Dtos\Estabelecimento\EstabelecimentoResponseDto;
 use Husail\MovingPay\Dtos\Estabelecimento\EstabelecimentoPaginacaoDto;
@@ -98,4 +99,24 @@ final class Estabelecimento extends AbstractApi
 
         return $response->setResponseDto(DepartamentosPaginacaoDto::class);
     }
+
+    /**
+     * Obter endereços do estabelecimento
+     *
+     * @param string $codigoCliente
+     * @return Response
+     *
+     * @throws ClientExceptionInterface
+     */
+    public function enderecos(string $codigoCliente): Response
+    {
+        $response = $this->httpClient->get('/enderecos', [
+            RequestOptions::QUERY => [
+                'mid' => $codigoCliente,
+            ],
+        ]);
+
+        return $response->setResponseDto(EnderecoPaginacaoDto::class);
+    }
+
 }
