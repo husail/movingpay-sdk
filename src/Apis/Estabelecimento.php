@@ -83,12 +83,12 @@ final class Estabelecimento extends AbstractApi
     /**
      * Obter departamentos do estabelecimento
      *
-     * @param int|string $codigoCliente
+     * @param string $codigoCliente
      * @return Response
      *
      * @throws ClientExceptionInterface
      */
-    public function departaments(int|string $codigoCliente): Response
+    public function departamentos(string $codigoCliente): Response
     {
         $response = $this->httpClient->get('/departamentos', [
             RequestOptions::QUERY => [
