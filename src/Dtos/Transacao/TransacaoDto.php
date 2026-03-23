@@ -30,7 +30,7 @@ class TransacaoDto extends BaseDto
     public ?string $authorizationCode;
     public ?string $tefNsu;
     public ?string $nsuLancamento;
-    public string $uuid;
+    public ?string $uuid;
     public ?array $splitRules;
     public string $nsu;
     public int $amount;
