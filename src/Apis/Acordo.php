@@ -24,7 +24,6 @@ final class Acordo extends AbstractApi
      * Consultar acordos do estabelecimento.
      *
      * Filtros disponíveis:
-     * - `merchant_id` (string, obrigatório): Código de identificação do estabelecimento. Não pode ser vazio.
      * - `rate_id` (string, opcional): Código do plano ao qual o acordo está vinculado.
      * - `acquirer_id` (string, opcional): Código da adquirente:
      *   - `5`: Rede S/A
@@ -36,7 +35,6 @@ final class Acordo extends AbstractApi
      * - `mcc` (string, opcional): Código MCC ao qual o acordo está vinculado.
      *
      * @param array{
-     *     merchant_id: non-empty-string,
      *     rate_id?: string,
      *     acquirer_id?: string,
      *     mcc?: string
