@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Husail\MovingPay;
 
 use Psr\Log\LoggerInterface;
+use Husail\MovingPay\Apis\Acordo;
 use Psr\Http\Message\UriInterface;
 use Husail\MovingPay\Apis\Transacao;
 use Husail\MovingPay\HttpClient\Builder;
@@ -42,6 +43,7 @@ final class Client
     private Builder $httpClientBuilder;
     public readonly Estabelecimento $estabelecimento;
     public readonly Transacao $transacao;
+    public readonly Acordo $acordo;
 
     public function __construct(?Authentication $authentication = null, ?Builder $httpClientBuilder = null, ?LoggerInterface $logger = null, ?FormatterInterface $formatter = null)
     {
@@ -66,6 +68,7 @@ final class Client
 
         $this->estabelecimento = new Estabelecimento($this->getHttpClient());
         $this->transacao = new Transacao($this->getHttpClient());
+        $this->acordo = new Acordo($this->getHttpClient());
     }
 
     private function factoryBaseUri(): UriInterface
