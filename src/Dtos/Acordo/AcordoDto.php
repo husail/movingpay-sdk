@@ -30,8 +30,8 @@ class AcordoDto extends BaseDto
     public string $ravOnline;
     public string $valorMinTransacao;
     public ?string $custoTransacao;
-    public string $custoTransacaoPresencial;
-    public string $custoTransacaoEcommerce;
+    public ?string $custoTransacaoPresencial;
+    public ?string $custoTransacaoEcommerce;
     public string $tipo;
     public string $diasPgto;
     public int $codigoBandeira;
