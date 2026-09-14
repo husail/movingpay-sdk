@@ -26,10 +26,13 @@ final class CategoriaMcc extends AbstractApi
      * Essa rota retorna um array de objetos contendo informações sobre todos os CNAEs cadastrados,
      * ordenados por ordem de data de cadastro, iniciando pelo mais recente.
      *
+     * O filtro `codigo_cnae` aceita código MCC, código CNAE ou descrição de MCC/CNAE.
+     *
      * @param array{
      *     page?: int,
-     *     limit?: int
-     * } $filters Filtros opcionais de paginação
+     *     limit?: int,
+     *     codigo_cnae?: string
+     * } $filters Filtros opcionais da consulta
      * @return Response
      *
      * @throws ClientExceptionInterface
