@@ -1,57 +1,69 @@
-# Architecture - MovingPay SDK
+# Endpoints - MovingPay SDK
 
-## Visão geral
+## Regra geral
 
-O SDK segue uma arquitetura simples:
+- Um endpoint novo deve seguir o padrão da API já existente.
+- Se o recurso já existir em `src/Apis`, adicionar o método à classe correspondente.
+- Se for um novo grupo de recursos, criar uma classe em `src/Apis` e expô-la no `Client`.
+- Métodos de endpoint devem retornar `HttpClient\Message\Response`.
+- Preservar nomes em português quando o domínio existente já seguir esse padrão.
 
-- `Client` expõe os recursos públicos.
-- `src/Apis` concentra as chamadas HTTP por domínio.
-- `src/Dtos` concentra os objetos de resposta.
-- `src/HttpClient` concentra a infraestrutura HTTP e plugins.
+## Definição do endpoint
 
-## Camadas
+Antes de implementar, confirmar:
 
-### Entrada pública
+- método HTTP;
+- path relativo à base URI;
+- parâmetros obrigatórios e opcionais;
+- localização dos parâmetros: path, query ou body;
+- formato da resposta;
+- DTO esperado, quando aplicável.
 
-- `Husail\MovingPay\Client`
-- Instancia o cliente HTTP e expõe as APIs como propriedades readonly.
+Se alguma dessas informações não estiver disponível, solicitá-la antes de inferir o contrato.
 
-### APIs
+## Consultas
 
-- Classes em `src/Apis` representam domínios da API.
-- Cada método da API corresponde a um endpoint.
-- Métodos retornam `HttpClient\Message\Response`.
+- Usar `GET` para listagens e consultas.
+- Enviar filtros por `RequestOptions::QUERY`.
+- Tipar filtros opcionais com array shape no PHPDoc.
+- O SDK monta a query string automaticamente a partir do array informado.
 
-### HTTP
+Exemplo:
 
-- `HttpClient\Builder` monta o cliente com plugins.
-- `HttpMethodsClient` encapsula `sendRequest` com métodos de alto nível.
-- Plugins cuidam de base URI, headers, auth e logging.
+```php
+/**
+ * @param array{
+ *     page?: int,
+ *     limit?: int
+ * } $filters
+ */
+public function todos(array $filters = []): Response
+{
+    return $this->httpClient->get('/recursos', [
+        RequestOptions::QUERY => $filters,
+    ]);
+}
+```
 
-### DTOs
+## Requisições com corpo
 
-- `BaseDto` é a base para mapeamento com Valinor.
-- DTOs representam payloads de resposta da API.
+- Usar `POST`, `PUT`, `PATCH` ou `DELETE` conforme o contrato da API.
+- Enviar o corpo por `RequestOptions::BODY`, seguindo o padrão atual do SDK.
+- Não definir manualmente `Authorization` ou `Customer`; esses headers são responsabilidade do `AuthenticationPlugin`.
 
-## Fluxo de uma requisição
+## Respostas
 
-1. `Client` cria ou recebe o `HttpMethodsClient`.
-2. A classe de API chama `get/post/put/...`.
-3. O `HttpMethodsClient` monta a requisição PSR-7.
-4. O `Psr\Http\Client\ClientInterface` envia a requisição.
-5. A resposta é embrulhada por `HttpClient\Message\Response`.
-6. `setResponseDto()` habilita o mapeamento para DTO.
+- Encapsular respostas em `HttpClient\Message\Response`.
+- Para estruturas conhecidas, criar DTOs e configurar o mapeamento com `setResponseDto(FQCN::class)`.
+- Conferir o envelope real da resposta, incluindo paginação e nome da propriedade da coleção.
+- Não assumir que exemplos de documentação representam os tipos reais retornados em produção.
 
-## Regras de extensão
+## Checklist
 
-- Não quebrar a API pública sem necessidade.
-- Sempre preferir reaproveitar a classe de API existente antes de criar outra.
-- Criar DTO novo apenas quando a estrutura da resposta exigir.
-- Manter o uso de discovery PSR-17/18.
-
-## Decisões importantes do projeto
-
-- Autenticação é aplicada por plugin.
-- Base URI é fixa para `https://api.movingpay.com.br/api/v3`.
-- Respostas são orientadas a JSON.
-- O SDK privilegia simplicidade e mapeamento direto de payload.
+- Método HTTP e path estão corretos.
+- Parâmetros obrigatórios e opcionais estão tipados e documentados.
+- Query e body usam a opção de requisição adequada.
+- Headers de autenticação não foram duplicados no endpoint.
+- Resposta está associada ao DTO correto.
+- Nova API pública foi exposta no `Client`, quando necessário.
+- Compatibilidade com os métodos existentes foi preservada.
