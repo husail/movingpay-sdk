@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Husail\MovingPay\Apis;
 
 use Psr\Http\Client\ClientExceptionInterface;
+use Husail\MovingPay\HttpClient\RequestOptions;
 use Husail\MovingPay\HttpClient\Message\Response;
 use Husail\MovingPay\Dtos\CategoriaMcc\CategoriaMccResponseDto;
 
@@ -25,13 +26,19 @@ final class CategoriaMcc extends AbstractApi
      * Essa rota retorna um array de objetos contendo informações sobre todos os CNAEs cadastrados,
      * ordenados por ordem de data de cadastro, iniciando pelo mais recente.
      *
+     * @param array{
+     *     page?: int,
+     *     limit?: int
+     * } $filters Filtros opcionais de paginação
      * @return Response
      *
      * @throws ClientExceptionInterface
      */
-    public function todos(): Response
+    public function todos(array $filters = []): Response
     {
-        $response = $this->httpClient->get('/tabelas/cnae');
+        $response = $this->httpClient->get('/tabelas/cnae', [
+            RequestOptions::QUERY => $filters,
+        ]);
 
         return $response->setResponseDto(CategoriaMccResponseDto::class);
     }
