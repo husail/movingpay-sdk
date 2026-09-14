@@ -18,7 +18,7 @@ use Husail\MovingPay\Dtos\BaseDto;
 class CategoriaMccDto extends BaseDto
 {
     public int $id;
-    public string $departamento;
+    public ?string $departamento;
     public string $codigoCnae;
     public string $descricaoCnae;
     public string $codigoMcc;
