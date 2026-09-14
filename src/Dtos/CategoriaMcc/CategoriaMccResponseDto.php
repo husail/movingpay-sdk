@@ -17,6 +17,11 @@ use Husail\MovingPay\Dtos\BaseDto;
 
 class CategoriaMccResponseDto extends BaseDto
 {
+    public int $total;
+    public int $perPage;
+    public int $page;
+    public int $lastPage;
+
     /** @var CategoriaMccDto[] */
-    public array $cnae;
+    public array $data;
 }
