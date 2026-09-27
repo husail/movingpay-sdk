@@ -18,6 +18,7 @@ use Husail\MovingPay\Apis\Acordo;
 use Psr\Http\Message\UriInterface;
 use Husail\MovingPay\Apis\Transacao;
 use Husail\MovingPay\Apis\Dispositivo;
+use Husail\MovingPay\Apis\Distribuidor;
 use Husail\MovingPay\Apis\CategoriaMcc;
 use Husail\MovingPay\HttpClient\Builder;
 use Http\Discovery\Psr17FactoryDiscovery;
@@ -36,6 +37,7 @@ use Husail\MovingPay\HttpClient\Message\Formatter\SimpleFormatter;
  * @property-read Estabelecimento $estabelecimento
  * @property-read Transacao $transacao
  * @property-read Dispositivo $dispositivo
+ * @property-read Distribuidor $distribuidor
  * @property-read CategoriaMcc $categoriaMcc
  */
 final class Client
@@ -49,6 +51,7 @@ final class Client
     public readonly Transacao $transacao;
     public readonly Acordo $acordo;
     public readonly Dispositivo $dispositivo;
+    public readonly Distribuidor $distribuidor;
     public readonly CategoriaMcc $categoriaMcc;
 
     public function __construct(?Authentication $authentication = null, ?Builder $httpClientBuilder = null, ?LoggerInterface $logger = null, ?FormatterInterface $formatter = null)
@@ -76,6 +79,7 @@ final class Client
         $this->transacao = new Transacao($this->getHttpClient());
         $this->acordo = new Acordo($this->getHttpClient());
         $this->dispositivo = new Dispositivo($this->getHttpClient());
+        $this->distribuidor = new Distribuidor($this->getHttpClient());
         $this->categoriaMcc = new CategoriaMcc($this->getHttpClient());
     }
 
