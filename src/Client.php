@@ -15,6 +15,7 @@ namespace Husail\MovingPay;
 
 use Psr\Log\LoggerInterface;
 use Husail\MovingPay\Apis\Acordo;
+use Husail\MovingPay\Apis\Parcela;
 use Psr\Http\Message\UriInterface;
 use Husail\MovingPay\Apis\Transacao;
 use Husail\MovingPay\Apis\Dispositivo;
@@ -39,6 +40,7 @@ use Husail\MovingPay\HttpClient\Message\Formatter\SimpleFormatter;
  * @property-read Dispositivo $dispositivo
  * @property-read Distribuidor $distribuidor
  * @property-read CategoriaMcc $categoriaMcc
+ * @property-read Parcela $parcela
  */
 final class Client
 {
@@ -53,6 +55,7 @@ final class Client
     public readonly Dispositivo $dispositivo;
     public readonly Distribuidor $distribuidor;
     public readonly CategoriaMcc $categoriaMcc;
+    public readonly Parcela $parcela;
 
     public function __construct(?Authentication $authentication = null, ?Builder $httpClientBuilder = null, ?LoggerInterface $logger = null, ?FormatterInterface $formatter = null)
     {
@@ -81,6 +84,7 @@ final class Client
         $this->dispositivo = new Dispositivo($this->getHttpClient());
         $this->distribuidor = new Distribuidor($this->getHttpClient());
         $this->categoriaMcc = new CategoriaMcc($this->getHttpClient());
+        $this->parcela = new Parcela($this->getHttpClient());
     }
 
     private function factoryBaseUri(): UriInterface
