@@ -40,7 +40,7 @@ class ParcelaDto extends BaseDto
     public int $taxaID;
     public string $taxaMdr;
     public string $taxaMdrEcommerce;
-    public string $contaAdquirente;
+    public ?string $contaAdquirente;
     public int $resolucaoAdquirente;
     public string $valorBruto;
     public int $valorReceber;
