@@ -35,7 +35,7 @@ class ParcelaDto extends BaseDto
     public DateTimeImmutable $dataPagamento;
     public string $situacao;
     public int $plano;
-    public int $mdrAdquirente;
+    public ?int $mdrAdquirente;
     public int $ecommerce;
     public int $taxaID;
     public string $taxaMdr;
