@@ -11,6 +11,7 @@ final class MovingPayConfiguration
     public function __construct(
         public readonly ClientCredentialsConfiguration $credentials,
         public readonly MtlsConfiguration $mtls,
+        public readonly string $customerId,
         public readonly string $baseUri = self::DEFAULT_BASE_URI,
         public readonly string $tokenCacheKey = 'movingpay:access-token',
         public readonly int $tokenRefreshSkew = 60,
@@ -19,6 +20,10 @@ final class MovingPayConfiguration
 
         if ($parts === false || ($parts['scheme'] ?? null) !== 'https' || empty($parts['host'])) {
             throw new \InvalidArgumentException('The MovingPay base URI must be a valid HTTPS URI.');
+        }
+
+        if ($customerId === '') {
+            throw new \InvalidArgumentException('The MovingPay customer ID is required.');
         }
 
         if ($tokenRefreshSkew < 0) {

@@ -94,7 +94,8 @@ final class Client
 
         $this->httpClientBuilder->addPlugin(new AuthenticationPlugin(
             $this->tokenProvider,
-            $this->factoryBaseUri()->getHost()
+            $this->factoryBaseUri()->getHost(),
+            $configuration->customerId
         ));
         if (!empty($logger)) {
             $this->httpClientBuilder->addPlugin(new LoggerPlugin(Client::PACKAGE_NAME, $logger, $formatter ?? new SimpleFormatter()));

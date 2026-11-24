@@ -16,7 +16,7 @@ final class AuthenticationPluginTest extends TestCase
 {
     public function test_it_adds_bearer_authentication_only_for_the_configured_host(): void
     {
-        $plugin = new AuthenticationPlugin($this->tokenProvider(), 'api-backoffice-mtls.movingpay.com.br');
+        $plugin = new AuthenticationPlugin($this->tokenProvider(), 'api-backoffice-mtls.movingpay.com.br', '180');
         $sentRequest = null;
 
         $promise = $plugin->handleRequest(
@@ -32,12 +32,12 @@ final class AuthenticationPluginTest extends TestCase
         $promise->wait();
 
         self::assertSame('Bearer token-value', $sentRequest->getHeaderLine('Authorization'));
-        self::assertFalse($sentRequest->hasHeader('Customer'));
+        self::assertSame('180', $sentRequest->getHeaderLine('Customer'));
     }
 
     public function test_it_rejects_an_untrusted_host(): void
     {
-        $plugin = new AuthenticationPlugin($this->tokenProvider(), 'api-backoffice-mtls.movingpay.com.br');
+        $plugin = new AuthenticationPlugin($this->tokenProvider(), 'api-backoffice-mtls.movingpay.com.br', '180');
 
         $this->expectException(\LogicException::class);
         $plugin->handleRequest(
@@ -71,7 +71,7 @@ final class AuthenticationPluginTest extends TestCase
                 return $this->getAccessToken();
             }
         };
-        $plugin = new AuthenticationPlugin($provider, 'api-backoffice-mtls.movingpay.com.br');
+        $plugin = new AuthenticationPlugin($provider, 'api-backoffice-mtls.movingpay.com.br', '180');
         $requests = [];
 
         $response = $plugin->handleRequest(
@@ -87,6 +87,7 @@ final class AuthenticationPluginTest extends TestCase
         self::assertSame(200, $response->getStatusCode());
         self::assertSame(1, $provider->invalidations);
         self::assertSame('Bearer new-token', $requests[1]->getHeaderLine('Authorization'));
+        self::assertSame('180', $requests[1]->getHeaderLine('Customer'));
     }
 
     private function tokenProvider(): AccessTokenProviderInterface

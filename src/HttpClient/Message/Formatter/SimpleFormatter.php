@@ -158,7 +158,7 @@ class SimpleFormatter implements FormatterInterface
     private function redactHeaders(array $headers): array
     {
         foreach ($headers as $name => $values) {
-            if (in_array(strtolower($name), ['authorization', 'proxy-authorization', 'x-api-key'], true)) {
+            if (in_array(strtolower($name), ['authorization', 'proxy-authorization', 'x-api-key', 'customer'], true)) {
                 $headers[$name] = ['[REDACTED]'];
             }
         }

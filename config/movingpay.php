@@ -5,6 +5,7 @@ return [
     'token_uri' => env('MOVINGPAY_TOKEN_URI', 'https://sso.movingpay.com.br/realms/prd-movingpay/protocol/openid-connect/token'),
     'client_id' => env('MOVINGPAY_CLIENT_ID'),
     'client_secret' => env('MOVINGPAY_CLIENT_SECRET'),
+    'customer_id' => env('MOVINGPAY_CUSTOMER_ID'),
     'mtls_cert' => env('MOVINGPAY_MTLS_CERT'),
     'mtls_key' => env('MOVINGPAY_MTLS_KEY'),
     'mtls_ca_bundle' => env('MOVINGPAY_MTLS_CA_BUNDLE'),

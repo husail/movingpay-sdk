@@ -56,6 +56,7 @@ class MovingPayServiceProvider extends ServiceProvider
                         privateKeyPath: (string) config('movingpay.mtls_key'),
                         caBundlePath: config('movingpay.mtls_ca_bundle') ?: null
                     ),
+                    customerId: (string) config('movingpay.customer_id'),
                     baseUri: (string) config('movingpay.base_uri'),
                     tokenCacheKey: (string) config('movingpay.token_cache_key'),
                     tokenRefreshSkew: (int) config('movingpay.token_refresh_skew', 60)

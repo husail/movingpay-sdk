@@ -23,17 +23,20 @@ final class AuthenticationPlugin implements Plugin
 {
     private AccessTokenProviderInterface $tokenProvider;
     private string $allowedHost;
+    private string $customerId;
 
     /**
      * Instantiate a new Authentication Plugin.
      *
      * @param AccessTokenProviderInterface $tokenProvider The provider used to obtain the access token.
      * @param string $allowedHost The MovingPay API host allowed to receive credentials.
+     * @param string $customerId The MovingPay customer identifier.
      */
-    public function __construct(AccessTokenProviderInterface $tokenProvider, string $allowedHost)
+    public function __construct(AccessTokenProviderInterface $tokenProvider, string $allowedHost, string $customerId)
     {
         $this->tokenProvider = $tokenProvider;
         $this->allowedHost = $allowedHost;
+        $this->customerId = $customerId;
     }
 
     /**
@@ -55,7 +58,9 @@ final class AuthenticationPlugin implements Plugin
             throw new \LogicException('MovingPay credentials can only be sent to the configured HTTPS API host.');
         }
 
-        $request = $request->withHeader('Authorization', sprintf('Bearer %s', $this->tokenProvider->getAccessToken()));
+        $request = $request
+            ->withHeader('Authorization', sprintf('Bearer %s', $this->tokenProvider->getAccessToken()))
+            ->withHeader('Customer', $this->customerId);
 
         return $next($request)->then(function (ResponseInterface $response) use ($next, $request) {
             if ($response->getStatusCode() === 401) {
@@ -65,7 +70,9 @@ final class AuthenticationPlugin implements Plugin
                 }
 
                 return $next(
-                    $request->withHeader('Authorization', sprintf('Bearer %s', $this->tokenProvider->getAccessToken()))
+                    $request
+                        ->withHeader('Authorization', sprintf('Bearer %s', $this->tokenProvider->getAccessToken()))
+                        ->withHeader('Customer', $this->customerId)
                 )->wait();
             }
 

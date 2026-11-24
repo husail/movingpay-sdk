@@ -35,6 +35,7 @@ $configuration = new MovingPayConfiguration(
         certificatePath: '/run/secrets/movingpay-client.pem',
         privateKeyPath: '/run/secrets/movingpay-client.key',
     ),
+    customerId: $_ENV['MOVINGPAY_CUSTOMER_ID'],
 );
 
 $client = new Client($configuration);
@@ -58,6 +59,7 @@ MOVINGPAY_BASE_URI=https://api-backoffice-mtls.movingpay.com.br/api/v3
 MOVINGPAY_TOKEN_URI=https://sso.movingpay.com.br/realms/prd-movingpay/protocol/openid-connect/token
 MOVINGPAY_CLIENT_ID=
 MOVINGPAY_CLIENT_SECRET=
+MOVINGPAY_CUSTOMER_ID=
 MOVINGPAY_MTLS_CERT=/run/secrets/movingpay-client.pem
 MOVINGPAY_MTLS_KEY=/run/secrets/movingpay-client.key
 MOVINGPAY_MTLS_CA_BUNDLE=
@@ -84,7 +86,7 @@ The SDK still refreshes a missing or expired token on demand, so the scheduler i
 
 ## Migration from static tokens
 
-Static `MOVINGPAY_TOKEN`, `MOVINGPAY_CUSTOMER_ID`, `Authentication`, and the `Customer` header are no longer supported. Configure OAuth credentials and mTLS paths instead.
+Static `MOVINGPAY_TOKEN` and `Authentication` are no longer supported. Configure OAuth credentials, the MovingPay customer ID, and mTLS paths instead.
 
 ## Security
 
