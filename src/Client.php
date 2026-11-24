@@ -17,20 +17,26 @@ use Psr\Log\LoggerInterface;
 use Husail\MovingPay\Apis\Acordo;
 use Husail\MovingPay\Apis\Parcela;
 use Psr\Http\Message\UriInterface;
+use Psr\SimpleCache\CacheInterface;
 use Husail\MovingPay\Apis\Transacao;
+use Laminas\Diactoros\StreamFactory;
+use Laminas\Diactoros\RequestFactory;
 use Husail\MovingPay\Apis\Dispositivo;
-use Husail\MovingPay\Apis\Distribuidor;
 use Husail\MovingPay\Apis\CategoriaMcc;
+use Husail\MovingPay\Apis\Distribuidor;
 use Husail\MovingPay\HttpClient\Builder;
-use Http\Discovery\Psr17FactoryDiscovery;
 use Husail\MovingPay\Apis\Estabelecimento;
 use Http\Client\Common\Plugin\BaseUriPlugin;
 use Husail\MovingPay\HttpClient\HttpMethodsClient;
 use Http\Client\Common\Plugin\HeaderDefaultsPlugin;
 use Husail\MovingPay\HttpClient\Plugin\LoggerPlugin;
+use Husail\MovingPay\HttpClient\CurlMtlsClientFactory;
+use Husail\MovingPay\Configuration\MovingPayConfiguration;
+use Husail\MovingPay\Contracts\AccessTokenProviderInterface;
 use Husail\MovingPay\HttpClient\Plugin\AuthenticationPlugin;
 use Husail\MovingPay\Contracts\Http\Message\FormatterInterface;
 use Husail\MovingPay\HttpClient\Message\Formatter\SimpleFormatter;
+use Husail\MovingPay\Authentication\ClientCredentialsTokenProvider;
 
 /**
  * MovingPay Client
@@ -46,9 +52,9 @@ final class Client
 {
     public const PACKAGE_NAME = 'MovingPay';
     public const USER_AGENT = 'movingpay-php-sdk/1.0';
-    public const BASE_URI = 'https://api.movingpay.com.br/api/v3';
-
     private Builder $httpClientBuilder;
+    private MovingPayConfiguration $configuration;
+    private AccessTokenProviderInterface $tokenProvider;
     public readonly Estabelecimento $estabelecimento;
     public readonly Transacao $transacao;
     public readonly Acordo $acordo;
@@ -57,9 +63,24 @@ final class Client
     public readonly CategoriaMcc $categoriaMcc;
     public readonly Parcela $parcela;
 
-    public function __construct(?Authentication $authentication = null, ?Builder $httpClientBuilder = null, ?LoggerInterface $logger = null, ?FormatterInterface $formatter = null)
-    {
-        $this->httpClientBuilder = $httpClientBuilder ?? new Builder();
+    public function __construct(
+        MovingPayConfiguration $configuration,
+        ?Builder $httpClientBuilder = null,
+        ?LoggerInterface $logger = null,
+        ?FormatterInterface $formatter = null,
+        ?CacheInterface $tokenCache = null,
+    ) {
+        $this->configuration = $configuration;
+        $this->httpClientBuilder = $httpClientBuilder ?? new Builder(CurlMtlsClientFactory::create($configuration->mtls));
+        $this->tokenProvider = new ClientCredentialsTokenProvider(
+            $configuration->credentials,
+            CurlMtlsClientFactory::createDefault(),
+            new RequestFactory(),
+            new StreamFactory(),
+            $tokenCache,
+            $configuration->tokenCacheKey,
+            $configuration->tokenRefreshSkew,
+        );
         $this->httpClientBuilder->addPlugin(new BaseUriPlugin($this->factoryBaseUri()));
         $this->httpClientBuilder->addPlugin(
             new HeaderDefaultsPlugin(
@@ -71,9 +92,10 @@ final class Client
             )
         );
 
-        if (!empty($authentication)) {
-            $this->httpClientBuilder->addPlugin(new AuthenticationPlugin($authentication));
-        }
+        $this->httpClientBuilder->addPlugin(new AuthenticationPlugin(
+            $this->tokenProvider,
+            $this->factoryBaseUri()->getHost()
+        ));
         if (!empty($logger)) {
             $this->httpClientBuilder->addPlugin(new LoggerPlugin(Client::PACKAGE_NAME, $logger, $formatter ?? new SimpleFormatter()));
         }
@@ -89,7 +111,7 @@ final class Client
 
     private function factoryBaseUri(): UriInterface
     {
-        return Psr17FactoryDiscovery::findUriFactory()->createUri(Client::BASE_URI);
+        return (new \Laminas\Diactoros\UriFactory())->createUri($this->configuration->baseUri);
     }
 
     public function getHttpClient(): HttpMethodsClient
@@ -97,9 +119,13 @@ final class Client
         return $this->httpClientBuilder->getHttpClient();
     }
 
-    public function authenticate(Authentication $authentication): void
+    public function refreshAccessToken(): string
     {
-        $this->httpClientBuilder->removePlugin(Authentication::class);
-        $this->httpClientBuilder->addPlugin(new AuthenticationPlugin($authentication));
+        return $this->tokenProvider->refresh();
+    }
+
+    public function ensureAccessToken(): string
+    {
+        return $this->tokenProvider->getAccessToken();
     }
 }

@@ -16,20 +16,24 @@ namespace Husail\MovingPay\HttpClient\Plugin;
 use Http\Promise\Promise;
 use Http\Client\Common\Plugin;
 use Psr\Http\Message\RequestInterface;
-use Husail\MovingPay\Contracts\AuthenticationInterface;
+use Psr\Http\Message\ResponseInterface;
+use Husail\MovingPay\Contracts\AccessTokenProviderInterface;
 
 final class AuthenticationPlugin implements Plugin
 {
-    private AuthenticationInterface $authentication;
+    private AccessTokenProviderInterface $tokenProvider;
+    private string $allowedHost;
 
     /**
      * Instantiate a new Authentication Plugin.
      *
-     * @param AuthenticationInterface $authentication The authentication provider used to obtain the authentication header.
+     * @param AccessTokenProviderInterface $tokenProvider The provider used to obtain the access token.
+     * @param string $allowedHost The MovingPay API host allowed to receive credentials.
      */
-    public function __construct(AuthenticationInterface $authentication)
+    public function __construct(AccessTokenProviderInterface $tokenProvider, string $allowedHost)
     {
-        $this->authentication = $authentication;
+        $this->tokenProvider = $tokenProvider;
+        $this->allowedHost = $allowedHost;
     }
 
     /**
@@ -46,9 +50,26 @@ final class AuthenticationPlugin implements Plugin
      */
     public function handleRequest(RequestInterface $request, callable $next, callable $first): Promise
     {
-        $request = $request->withHeader('Authorization', $this->authentication->getAuthenticationHeader());
-        $request = $request->withHeader('Customer', $this->authentication->getCustomerIdHeader());
+        $uri = $request->getUri();
+        if ($uri->getScheme() !== 'https' || $uri->getHost() !== $this->allowedHost) {
+            throw new \LogicException('MovingPay credentials can only be sent to the configured HTTPS API host.');
+        }
 
-        return $next($request);
+        $request = $request->withHeader('Authorization', sprintf('Bearer %s', $this->tokenProvider->getAccessToken()));
+
+        return $next($request)->then(function (ResponseInterface $response) use ($next, $request) {
+            if ($response->getStatusCode() === 401) {
+                $this->tokenProvider->invalidate();
+                if ($request->getBody()->isSeekable()) {
+                    $request->getBody()->rewind();
+                }
+
+                return $next(
+                    $request->withHeader('Authorization', sprintf('Bearer %s', $this->tokenProvider->getAccessToken()))
+                )->wait();
+            }
+
+            return $response;
+        });
     }
 }

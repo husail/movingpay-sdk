@@ -62,7 +62,7 @@ class SimpleFormatter implements FormatterInterface
      */
     public function formatRequest(RequestInterface $request, ?string $uid): string
     {
-        $headers = json_encode($request->getHeaders(), $this->outputExpanded ? self::JSON_ENCODE_OPTIONS : 0);
+        $headers = json_encode($this->redactHeaders($request->getHeaders()), $this->outputExpanded ? self::JSON_ENCODE_OPTIONS : 0);
 
         return sprintf(
             "Request:\nUID: %s\nMethod: %s\nURI: %s\nHeaders: %s\nBody: %s\n",
@@ -110,7 +110,7 @@ class SimpleFormatter implements FormatterInterface
         $requestDetails = json_encode([
             'method' => $request->getMethod(),
             'uri' => (string) $request->getUri(),
-            'headers' => $request->getHeaders(),
+            'headers' => $this->redactHeaders($request->getHeaders()),
             'body' => $this->formatMessageBody($request),
         ], $jsonEncodeOptions);
         $responseDetails = json_encode([
@@ -148,6 +148,36 @@ class SimpleFormatter implements FormatterInterface
             return $messageFormatted . '[Binary Body Omitted]';
         }
 
-        return $messageFormatted . $streamContent;
+        return $messageFormatted . $this->redactBody($streamContent);
+    }
+
+    /**
+     * @param array<string, string[]> $headers
+     * @return array<string, string[]>
+     */
+    private function redactHeaders(array $headers): array
+    {
+        foreach ($headers as $name => $values) {
+            if (in_array(strtolower($name), ['authorization', 'proxy-authorization', 'x-api-key'], true)) {
+                $headers[$name] = ['[REDACTED]'];
+            }
+        }
+
+        return $headers;
+    }
+
+    private function redactBody(string $body): string
+    {
+        return (string) preg_replace(
+            [
+                '/("(?:client_secret|access_token|refresh_token|token)"\s*:\s*)"[^"]*"/i',
+                '/((?:client_secret|access_token|refresh_token|token)=)[^&\s]+/i',
+            ],
+            [
+                '$1"[REDACTED]"',
+                '$1[REDACTED]',
+            ],
+            $body
+        );
     }
 }
